@@ -3,24 +3,27 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class WelcomeEmail extends Mailable
 {
     use Queueable, SerializesModels;
+
+    public $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -31,7 +34,8 @@ class WelcomeEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Welcome Email',
+            from: new Address('hello@example.com',env('MAIL_FROM_NAME')),
+            subject: 'Welcome Thank You For Registration',
         );
     }
 
@@ -43,7 +47,7 @@ class WelcomeEmail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            view: 'email.welcome_email',
         );
     }
 
